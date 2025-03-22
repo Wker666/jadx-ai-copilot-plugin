@@ -16,7 +16,7 @@ public class JadxAiPlugin implements JadxPlugin {
 	@Override
 	public JadxPluginInfo getPluginInfo() {
 		return new JadxPluginInfo(PLUGIN_ID, "Ai-Copilot", "An AI copilot improves reverse analysis capabilities"
-		,"https://github.com/Wker666/jadx-ai-copilot-plugin","Ai copilot");
+				,"https://github.com/Wker666/jadx-ai-copilot-plugin","Ai copilot");
 	}
 
 	@Override
