@@ -1,0 +1,114 @@
+{
+	"security_analysis": {
+		"vulnerability_analysis": {
+			"Node": "Identify and explain potential security vulnerabilities in the following Java code in detail:",
+			"Edge": "Identify and explain the security vulnerabilities in the following two Java codes and their connection in detail:",
+			"Clutter": "Identify and explain the security vulnerabilities in the following Java code segments and their connections in detail:"
+		},
+		"code_injection_detection": {
+			"Node": "Detect and explain potential code injection vulnerabilities in the following Java code in detail:",
+			"Edge": "Detect and explain potential code injection vulnerabilities in the following two Java codes and their connection in detail:",
+			"Clutter": "Detect and explain potential code injection vulnerabilities in the following Java code segments and their connections in detail:"
+		},
+		"java_web_security": {
+			"Node": "Identify and explain the security vulnerabilities in the following Java Web application in detail:",
+			"Edge": "Identify and explain the security vulnerabilities in the following two Java Web applications and their connection in detail:",
+			"Clutter": "Identify and explain the security vulnerabilities in the following Java Web application segments and their connections in detail:"
+		},
+		"android_security_testing": {
+			"Node": "Provide a detailed explanation of how to perform security testing on the following Android app:",
+			"Edge": "Provide a detailed explanation of how to perform security testing on the following two Android apps and their connection:",
+			"Clutter": "Provide a detailed explanation of how to perform security testing on the following Android app segments and their connections:"
+		}
+	},
+	"decryption_analysis": {
+		"decryption": {
+			"Node": "Decompile and explain the decryption process of the following Java code in detail:",
+			"Edge": "Decompile and explain the decryption process of the following two Java codes and their connection in detail:",
+			"Clutter": "Decompile and explain the decryption process of the following Java code segments and their connections in detail:"
+		}
+	},
+	"reverse_engineering_analysis": {
+		"reverse_engineering": {
+			"Node": "Perform a reverse engineering analysis of the following Java code in detail:",
+			"Edge": "Perform a reverse engineering analysis of the following two Java codes and their connection in detail:",
+			"Clutter": "Perform a reverse engineering analysis of the following Java code segments and their connections in detail:"
+		},
+		"android_reverse_engineering": {
+			"Node": "Provide a detailed reverse engineering analysis of the following Android app:",
+			"Edge": "Provide a detailed reverse engineering analysis of the following two Android apps and their connection:",
+			"Clutter": "Provide a detailed reverse engineering analysis of the following Android app segments and their connections:"
+		}
+	},
+	"performance_and_bug_analysis": {
+		"bug_fixing": {
+			"Node": "Identify and fix the bug in the following Java code in detail:",
+			"Edge": "Identify and fix the bugs in the following two Java codes and their connection in detail:",
+			"Clutter": "Identify and fix the bugs in the following Java code segments and their connections in detail:"
+		},
+		"performance_optimization": {
+			"Node": "Analyze and optimize the performance of the following Java code in detail:",
+			"Edge": "Analyze and optimize the performance of the following two Java codes and their connection in detail:",
+			"Clutter": "Analyze and optimize the performance of the following Java code segments and their connections in detail:"
+		}
+	},
+	"conversion": {
+		"Python": {
+			"Node": "Convert the following Java code into Python code:",
+			"Edge": "Convert the following two Java codes into Python codes:",
+			"Clutter": "Convert the following Java codes into Python codes:"
+		},
+		"C": {
+			"Node": "Convert the following Java code into C code:",
+			"Edge": "Convert the following two Java codes into C codes:",
+			"Clutter": "Convert the following Java codes into C codes:"
+		},
+		"JavaScript": {
+			"Node": "Convert the following Java code into JavaScript code:",
+			"Edge": "Convert the following two Java codes into JavaScript codes:",
+			"Clutter": "Convert the following Java codes into JavaScript codes:"
+		},
+		"android_to_java": {
+			"Node": "Convert the following Android-specific Java code into standard Java code:",
+			"Edge": "Convert the following two Android-specific Java codes into standard Java codes:",
+			"Clutter": "Convert the following Android-specific Java code segments into standard Java codes:"
+		},
+		"java_web_to_backend": {
+			"Node": "Convert the following Java Web application code into a backend microservice code in another language:",
+			"Edge": "Convert the following two Java Web application codes into backend microservice codes in different languages:",
+			"Clutter": "Convert the following Java Web application code segments into backend microservice codes in different languages:"
+		}
+	},
+	"tools": {
+		"obfuscation_detection": {
+			"Node": "Detect and explain the obfuscation techniques used in the following Java code in detail:",
+			"Edge": "Detect and explain the obfuscation techniques used in the following two Java codes and their connection in detail:",
+			"Clutter": "Detect and explain the obfuscation techniques used in the following Java code segments and their connections in detail:"
+		},
+		"concurrency_analysis": {
+			"Node": "Analyze and explain the concurrency issues in the following Java code in detail:",
+			"Edge": "Analyze and explain the concurrency issues in the following two Java codes and their connection in detail:",
+			"Clutter": "Analyze and explain the concurrency issues in the following Java code segments and their connections in detail:"
+		},
+		"unicorn_analysis": {
+			"Node": "Provide a detailed explanation of how Unicorn can be used for analysis on the following Java or Android code:",
+			"Edge": "Provide a detailed explanation of how Unicorn is used for analyzing the following two Java or Android code snippets and their connection:",
+			"Clutter": "Provide a detailed explanation of how Unicorn is used for analyzing the following Java or Android code segments and their connections:"
+		},
+		"frida_analysis": {
+			"Node": "Provide a detailed explanation of how Frida is used for dynamic analysis of the following Android app or Java code:",
+			"Edge": "Provide a detailed explanation of how Frida is used for dynamic analysis of the following two Android apps or Java code snippets and their connection:",
+			"Clutter": "Provide a detailed explanation of how Frida is used for dynamic analysis of the following Android app or Java code segments and their connections:"
+		},
+		"unicorn_usage": {
+			"Node": "Explain how to use Unicorn to analyze the following Java or Android code in one sentence:",
+			"Edge": "Explain how Unicorn is used to analyze the following two Java or Android code snippets and their connection in one sentence:",
+			"Clutter": "Explain how Unicorn is used to analyze the following Java or Android code segments and their connections in one sentence:"
+		},
+		"frida_usage": {
+			"Node": "Explain how to use Frida for dynamic analysis of the following Android app in one sentence:",
+			"Edge": "Explain how to use Frida for dynamic analysis of the following two Android apps and their connection in one sentence:",
+			"Clutter": "Explain how to use Frida for dynamic analysis of the following Android app segments and their connections in one sentence:"
+		}
+	}
+}

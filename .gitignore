@@ -1,0 +1,33 @@
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# IntelliJ Idea files
+.idea/
+.run/
+out/
+*.iml
+*.ipr
+*.iws
+.attach_pid*
+*.hprof
+
+**/.DS_Store
+
+bin/
+target/
+build/
+classes/
+idea/
+.gradle/
+
+*-tmp/
+**/tmp/
+
+*.class
+*.dump
+*.log
+*.cfg
+*.orig
+
