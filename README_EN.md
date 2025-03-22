@@ -19,7 +19,7 @@ Currently, the supported AI models are provided by [LangChain4j](https://github.
 ### Installation
 To install the plugin in Jadx:
 ```bash
-jadx plugins --install "github:Wker666:jadx-ai-copilot-plugin"
+jadx plugins --install "github:Wker666:jadx-ai-copilot-plugin:v1.0.0"
 ```
 Alternatively, you can click `Plugins` -> `Install Plugin` in the UI and select the corresponding plugin.
 

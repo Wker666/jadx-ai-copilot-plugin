@@ -21,7 +21,7 @@
 ### 安装
 jadx安装插件：
 ```bash
-jadx plugins --install "github:Wker666:jadx-ai-copilot-plugin"
+jadx plugins --install "github:Wker666:jadx-ai-copilot-plugin:v1.0.0"
 ```
 或者在UI界面点击 插件->安装插件，选择对应插件即可。
 
