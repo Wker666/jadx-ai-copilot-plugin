@@ -1,5 +1,6 @@
 package jadx.plugins.ai;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jadx.api.JavaMethod;
 import jadx.api.JavaNode;
 import jadx.api.data.CommentStyle;
@@ -24,7 +25,9 @@ import jadx.plugins.ai.utils.CodeExtractor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JadxAiViewAction {
 
@@ -35,6 +38,8 @@ public class JadxAiViewAction {
 	public static String COMMENT_CLASS = "Please write a detailed comment for the following class and return only the comment content. The returned content should meet the Java code comment style, but there should be no comment annotations. Only return the plain text of the comment to me, not the markdown format.";
 	public static String COMMENT_METHOD = "Please write a detailed comment for the following method and return only the comment content. The returned content should meet the Java code comment style, but there should be no comment annotations. Only return the plain text of the comment to me, not the markdown format.";
 	public static String DECOMPILE_METHOD = "Please decompile the following Smail code into Java code, ensuring that the code logic is exactly the same. Only return the Java code of this function, do not return any other content, do not return the markdown format, only return the code. Remember that the code needs to be decompiled exactly the same.";
+
+	public static String RENAME_ALL_METHOD = "What is returned to me must be pure JSON content, and the JSON is stored in the form of key-value pairs. The key name is the original method name, and the key value is the optimized method name. Make sure that the returned JSON string is in the above format. Do not return it to me in markdown format, do not include `, just a pure JSON string. This is the command.";
 
 	public static void addToPopupMenu(JadxPluginContext context) {
 		JadxAiViewAction.context = context;
@@ -62,6 +67,35 @@ public class JadxAiViewAction {
 				((ClassNode) ref).getClassInfo().changeShortName(s);
 			}
 			context.getGuiContext().applyNodeRename(ref);
+		});
+
+		context.getGuiContext().addPopupMenuAction("Ai Rename All Method", ref -> (ref.getAnnType() == ICodeAnnotation.AnnType.CLASS),
+				null, ref -> {
+			JavaNode node = context.getDecompiler().getJavaNodeByRef(ref);
+			String code = CodeExtractor.getCode(node);
+			ClassNode clsNode = (ClassNode) ref;
+			String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
+			ObjectMapper objectMapper = new ObjectMapper();
+			try {
+				Map<String,MethodNode> nodeSmap = new HashMap<>();
+				assert clsNode != null;
+				for (MethodNode method : clsNode.getMethods()) {
+					nodeSmap.put(method.getName(), method);
+				}
+				Map<String, Object> map = objectMapper.readValue(s, Map.class);
+				for (Map.Entry<String, Object> entry : map.entrySet()) {
+					String mthName = entry.getKey();
+					MethodNode methodNode = nodeSmap.get(mthName);
+					if(methodNode == null){
+						// 此处匹配错误。
+						continue;
+					}
+					methodNode.rename((String) entry.getValue());
+					context.getGuiContext().applyNodeRename(methodNode);
+				}
+			} catch (Exception e) {
+				throw new RuntimeException("error:\n"+s);
+			}
 		});
 
 		context.getGuiContext().addPopupMenuAction("Ai Comment", ref -> ref.getAnnType() == ICodeAnnotation.AnnType.METHOD

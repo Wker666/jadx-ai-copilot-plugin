@@ -49,6 +49,21 @@ public class JadxAiViewOptions extends BasePluginOptionsBuilder {
 				.setter(i -> {LangchainOpenAiChatModel.getInstance(null).getConfig().setMaxRetries(i);LangchainOpenAiChatModel.getInstance(null).createChatModuleByConfig();});
 
 
+		boolOption(JadxAiPlugin.PLUGIN_ID + ".Use Socks5 Proxy")
+				.description("Use Socks5 Proxy")
+				.defaultValue(LangchainOpenAiChatModel.getInstance(null).getConfig().getUseProxy())
+				.setter(i -> {LangchainOpenAiChatModel.getInstance(null).getConfig().setUseProxy(i);LangchainOpenAiChatModel.getInstance(null).createChatModuleByConfig();});
+
+
+		strOption(JadxAiPlugin.PLUGIN_ID + ".Set Socks5 Proxy Host")
+				.description("Set Proxy Host")
+				.defaultValue(LangchainOpenAiChatModel.getInstance(null).getConfig().getProxyHost())
+				.setter(s -> {LangchainOpenAiChatModel.getInstance(null).getConfig().setProxyHost(s);LangchainOpenAiChatModel.getInstance(null).createChatModuleByConfig();});
+
+		intOption(JadxAiPlugin.PLUGIN_ID + ".Set Socks5 Proxy Port")
+				.description("Set Socks5 Proxy Port")
+				.defaultValue(LangchainOpenAiChatModel.getInstance(null).getConfig().getProxyPort())
+				.setter(i -> {LangchainOpenAiChatModel.getInstance(null).getConfig().setProxyPort(i);LangchainOpenAiChatModel.getInstance(null).createChatModuleByConfig();});
 
 		strOption(JadxAiPlugin.PLUGIN_ID + ".Set Rename method prompt")
 				.description("Set Rename method prompt")
@@ -58,6 +73,10 @@ public class JadxAiViewOptions extends BasePluginOptionsBuilder {
 				.description("Set Rename class prompt")
 				.defaultValue(JadxAiViewAction.RENAME_CLASS)
 				.setter(s -> JadxAiViewAction.RENAME_CLASS = s);
+		strOption(JadxAiPlugin.PLUGIN_ID + ".Set Rename Class All method prompt")
+				.description("Set Rename Class All method prompt")
+				.defaultValue(JadxAiViewAction.RENAME_ALL_METHOD)
+				.setter(s -> JadxAiViewAction.RENAME_ALL_METHOD = s);
 		strOption(JadxAiPlugin.PLUGIN_ID + ".Set Comment method prompt")
 				.description("Set Comment method prompt")
 				.defaultValue(JadxAiViewAction.COMMENT_METHOD)

@@ -8,6 +8,8 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import jadx.plugins.ai.config.OpenAiConfig;
 import jadx.plugins.ai.module.QAMap;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +48,17 @@ public class LangchainOpenAiChatModel {
 
 	public void createChatModuleByConfig(){
 		try{
-			this.ChatModel = OpenAiChatModel.builder()
+			OpenAiChatModel.OpenAiChatModelBuilder openAiChatModelBuilder = OpenAiChatModel.builder()
 					.apiKey(config.getApiKey())
 					.baseUrl(config.getBaseUrl())
 					.temperature(config.getTemperature())
 					.maxTokens(config.getMaxTokens())
 					.modelName(config.getModelName())
-					.maxRetries(config.getMaxRetries())
-					.build();
+					.maxRetries(config.getMaxRetries());
+			if(config.getUseProxy()){
+				openAiChatModelBuilder.proxy(new Proxy(Proxy.Type.SOCKS,new InetSocketAddress(config.getProxyHost(),config.getProxyPort())));
+			}
+			this.ChatModel = openAiChatModelBuilder.build();
 		}catch (Exception e){
 		}
 	}

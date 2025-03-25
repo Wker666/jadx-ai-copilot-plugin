@@ -46,6 +46,9 @@ jadx plugins --install "github:Wker666:jadx-ai-copilot-plugin"
   * class: 编写类注释时的提示词
 * Decompile: AI 反汇编时的提示词，Ai 反汇编会获取方法的smail代码发送给AI进行反编译，可以将无法反编译的代码一定程度的还原，但是不可完全相信。
 
+* Proxy:
+  * 使用socks5代理访问
+
 配置完毕之后，可以在打开某个反编译项目时看到插件下方的 Jadx Ai Copilot 选项，点击之后检查当前的配置：
 
 ![config check](image/config_check.png)
@@ -69,6 +72,10 @@ jadx plugins --install "github:Wker666:jadx-ai-copilot-plugin"
 ### Ai Decompile
 
 同上，仅对方法有效。
+
+### Ai Rename All Class method
+
+同上，仅对类有效。
 
 ### Ai Analyze
 

@@ -9,6 +9,10 @@ public class OpenAiConfig {
 	private double temperature = 0;
 	private int maxRetries = 3;
 
+	private boolean useProxy = false;
+	private String proxyHost = "127.0.0.1";
+	private int proxyPort = 1080;
+
 	public OpenAiConfig() {
 	}
 
@@ -69,16 +73,43 @@ public class OpenAiConfig {
 		this.systemMsg = systemMsg;
 	}
 
+	public boolean getUseProxy() {
+		return useProxy;
+	}
+
+	public void setUseProxy(boolean useProxy) {
+		this.useProxy = useProxy;
+	}
+
+	public String getProxyHost() {
+		return proxyHost;
+	}
+
+	public void setProxyHost(String proxyHost) {
+		this.proxyHost = proxyHost;
+	}
+
+	public int getProxyPort() {
+		return proxyPort;
+	}
+
+	public void setProxyPort(int proxyPort) {
+		this.proxyPort = proxyPort;
+	}
+
 	@Override
 	public String toString() {
 		return "OpenAiConfig{" +
-				", baseUrl='" + baseUrl + '\'' +
+				"baseUrl='" + baseUrl + '\'' +
+				", modelName='" + modelName + '\'' +
 				", apiKey='" + apiKey + '\'' +
+				", systemMsg='" + systemMsg + '\'' +
 				", maxTokens=" + maxTokens +
 				", temperature=" + temperature +
-				", modelName='" + modelName + '\'' +
 				", maxRetries=" + maxRetries +
-				", systemMsg='" + systemMsg + '\'' +
+				", useProxy=" + useProxy +
+				", proxyHost='" + proxyHost + '\'' +
+				", proxyPort=" + proxyPort +
 				'}';
 	}
 }

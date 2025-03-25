@@ -44,6 +44,10 @@ Select the Ai-Copilot plugin in Jadx's preferences for configuration.
 	* class: The prompt for writing class comments.
 * Decompile: The prompt for AI decompilation. AI decompilation will send the smali code of the method to the AI for decompilation, which can restore the code that cannot be decompiled to a certain extent, but you can't fully trust it.
 
+* Proxy:
+	* use socks5 request
+
+
 After the configuration is completed, you can see the `Jadx Ai Copilot` option below the plugin when opening a decompilation project. Click it to check the current configuration:
 
 ![config check](image/config_check.png)
@@ -67,6 +71,10 @@ Same as above.
 ### AI Decompile
 
 Same as above, but it only works for methods.
+
+### Ai Rename All Class method
+
+Same as above, but it only works for class.
 
 ### AI Analyze
 
