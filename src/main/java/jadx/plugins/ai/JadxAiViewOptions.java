@@ -48,6 +48,11 @@ public class JadxAiViewOptions extends BasePluginOptionsBuilder {
 				.defaultValue(LangchainOpenAiChatModel.getInstance(null).getConfig().getMaxRetries())
 				.setter(i -> {LangchainOpenAiChatModel.getInstance(null).getConfig().setMaxRetries(i);LangchainOpenAiChatModel.getInstance(null).createChatModuleByConfig();});
 
+		intOption(JadxAiPlugin.PLUGIN_ID + ".Set timeout(s)")
+				.description("Set timeout(s)")
+				.defaultValue(LangchainOpenAiChatModel.getInstance(null).getConfig().getTimeout())
+				.setter(i -> {LangchainOpenAiChatModel.getInstance(null).getConfig().setTimeout(i);LangchainOpenAiChatModel.getInstance(null).createChatModuleByConfig();});
+
 
 		boolOption(JadxAiPlugin.PLUGIN_ID + ".Use Socks5 Proxy")
 				.description("Use Socks5 Proxy")
