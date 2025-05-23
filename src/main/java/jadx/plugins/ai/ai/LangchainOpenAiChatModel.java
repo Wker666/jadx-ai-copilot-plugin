@@ -10,6 +10,7 @@ import jadx.plugins.ai.module.QAMap;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class LangchainOpenAiChatModel {
 					.temperature(config.getTemperature())
 					.maxTokens(config.getMaxTokens())
 					.modelName(config.getModelName())
+					.timeout(Duration.ofSeconds(config.getTimeout()))
 					.maxRetries(config.getMaxRetries());
 			if(config.getUseProxy()){
 				openAiChatModelBuilder.proxy(new Proxy(Proxy.Type.SOCKS,new InetSocketAddress(config.getProxyHost(),config.getProxyPort())));

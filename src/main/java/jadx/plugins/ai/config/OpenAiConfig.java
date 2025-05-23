@@ -8,6 +8,7 @@ public class OpenAiConfig {
 	private int maxTokens = 3000;
 	private double temperature = 0;
 	private int maxRetries = 3;
+	private int timeout = 60;
 
 	private boolean useProxy = false;
 	private String proxyHost = "127.0.0.1";
@@ -63,6 +64,14 @@ public class OpenAiConfig {
 
 	public void setMaxRetries(int maxRetries) {
 		this.maxRetries = maxRetries;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 	public String getSystemMsg() {
