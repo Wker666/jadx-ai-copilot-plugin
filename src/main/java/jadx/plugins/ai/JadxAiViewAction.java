@@ -83,18 +83,25 @@ public class JadxAiViewAction {
 					nodeSmap.put(method.getName(), method);
 				}
 				Map<String, Object> map = objectMapper.readValue(s, Map.class);
+				List<String> notFound = new ArrayList<>();
 				for (Map.Entry<String, Object> entry : map.entrySet()) {
 					String mthName = entry.getKey();
 					MethodNode methodNode = nodeSmap.get(mthName);
 					if(methodNode == null){
-						// 此处匹配错误。
+						notFound.add(mthName);
 						continue;
 					}
 					methodNode.rename((String) entry.getValue());
 					context.getGuiContext().applyNodeRename(methodNode);
 				}
+				if (!notFound.isEmpty()) {
+					System.err.println("Methods not found for renaming: " + notFound);
+					// Optionally, show a GUI dialog here
+				}
 			} catch (Exception e) {
-				throw new RuntimeException("error:\n"+s);
+				e.printStackTrace();
+				System.err.println("Failed to parse AI response: " + s);
+				// Optionally, show a GUI dialog here
 			}
 		});
 
