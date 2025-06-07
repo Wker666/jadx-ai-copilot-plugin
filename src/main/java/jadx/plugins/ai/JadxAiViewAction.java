@@ -70,40 +70,52 @@ public class JadxAiViewAction {
 		});
 
 		context.getGuiContext().addPopupMenuAction("Ai Rename All Method", ref -> (ref.getAnnType() == ICodeAnnotation.AnnType.CLASS),
-				null, ref -> {
-			JavaNode node = context.getDecompiler().getJavaNodeByRef(ref);
-			String code = CodeExtractor.getCode(node);
-			ClassNode clsNode = (ClassNode) ref;
-			String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
-			ObjectMapper objectMapper = new ObjectMapper();
-			try {
-				Map<String,MethodNode> nodeSmap = new HashMap<>();
-				assert clsNode != null;
-				for (MethodNode method : clsNode.getMethods()) {
-					nodeSmap.put(method.getName(), method);
-				}
-				Map<String, Object> map = objectMapper.readValue(s, Map.class);
-				List<String> notFound = new ArrayList<>();
-				for (Map.Entry<String, Object> entry : map.entrySet()) {
-					String mthName = entry.getKey();
-					MethodNode methodNode = nodeSmap.get(mthName);
-					if(methodNode == null){
-						notFound.add(mthName);
-						continue;
-					}
-					methodNode.rename((String) entry.getValue());
-					context.getGuiContext().applyNodeRename(methodNode);
-				}
-				if (!notFound.isEmpty()) {
-					System.err.println("Methods not found for renaming: " + notFound);
-					// Optionally, show a GUI dialog here
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println("Failed to parse AI response: " + s);
-				// Optionally, show a GUI dialog here
-			}
-		});
+                null, ref -> {
+            JavaNode node = context.getDecompiler().getJavaNodeByRef(ref);
+            String code = CodeExtractor.getCode(node);
+            ClassNode clsNode = (ClassNode) ref;
+            String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                Map<String,MethodNode> nodeSmap = new HashMap<>();
+                assert clsNode != null;
+                for (MethodNode method : clsNode.getMethods()) {
+                    nodeSmap.put(method.getName(), method);
+                }
+                Map<String, Object> map = objectMapper.readValue(s, Map.class);
+                List<String> notFound = new ArrayList<>();
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    String mthName = entry.getKey();
+                    MethodNode methodNode = nodeSmap.get(mthName);
+                    if(methodNode == null){
+                        notFound.add(mthName);
+                        continue;
+                    }
+                    methodNode.rename((String) entry.getValue());
+                    context.getGuiContext().applyNodeRename(methodNode);
+                }
+                if (!notFound.isEmpty()) {
+                    System.err.println("Methods not found for renaming: " + notFound);
+                    // Optionally, show a GUI dialog here
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        javax.swing.JOptionPane.showMessageDialog(null,
+                                "Some methods could not be renamed: " + notFound,
+                                "AI Rename All Method Warning",
+                                javax.swing.JOptionPane.WARNING_MESSAGE);
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Failed to parse or apply AI response: " + s);
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    javax.swing.JOptionPane.showMessageDialog(null,
+                            "Failed to parse or apply AI response:\n" + s +
+                            "\n\nError: " + e.getMessage(),
+                            "AI Rename All Method Error",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
+                });
+            }
+        });
 
 		context.getGuiContext().addPopupMenuAction("Ai Comment", ref -> ref.getAnnType() == ICodeAnnotation.AnnType.METHOD
 				|| (ref.getAnnType() == ICodeAnnotation.AnnType.CLASS), null, iCodeNodeRef -> {
