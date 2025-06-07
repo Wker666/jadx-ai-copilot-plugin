@@ -21,7 +21,8 @@ import jadx.plugins.ai.ai.LangchainOpenAiChatModel;
 import jadx.plugins.ai.module.GraphStructure;
 import jadx.plugins.ai.ui.FlowchartUI;
 import jadx.plugins.ai.utils.CodeExtractor;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +41,7 @@ public class JadxAiViewAction {
 	public static String DECOMPILE_METHOD = "Please decompile the following Smail code into Java code, ensuring that the code logic is exactly the same. Only return the Java code of this function, do not return any other content, do not return the markdown format, only return the code. Remember that the code needs to be decompiled exactly the same.";
 
 	public static String RENAME_ALL_METHOD = "What is returned to me must be pure JSON content, and the JSON is stored in the form of key-value pairs. The key name is the original method name, and the key value is the optimized method name. Make sure that the returned JSON string is in the above format. Do not return it to me in markdown format, do not include `, just a pure JSON string. This is the command.";
+	private static final Logger LOG = LoggerFactory.getLogger(JadxAiViewAction.class);
 
 	public static void addToPopupMenu(JadxPluginContext context) {
 		JadxAiViewAction.context = context;
@@ -75,7 +77,7 @@ public class JadxAiViewAction {
             String code = CodeExtractor.getCode(node);
             ClassNode clsNode = (ClassNode) ref;
             String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
-            System.out.println("[AI Rename All Method] Raw response: " + s);
+			LOG.info("[AI Rename All Method] Raw response: {}", s);
             // Strip markdown code fences if present
             if (s.startsWith("```json")) {
                 s = s.substring(7).trim();
@@ -110,7 +112,7 @@ public class JadxAiViewAction {
                     context.getGuiContext().applyNodeRename(methodNode);
                 }
                 if (!notFound.isEmpty()) {
-                    System.err.println("Methods not found for renaming: " + notFound);
+					LOG.warn("Methods not found for renaming: {}", notFound);
                     final String notFoundMsg = "Some methods could not be renamed: " + notFound;
                     javax.swing.SwingUtilities.invokeLater(() -> {
                         javax.swing.JOptionPane.showMessageDialog(null,
@@ -121,7 +123,7 @@ public class JadxAiViewAction {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.err.println("Failed to parse or apply AI response: " + s);
+				LOG.error("Failed to parse or apply AI response: {}", s, e);
                 final String errorMsg = "Failed to parse or apply AI response:\n" + s +
                         "\n\nError: " + e.getMessage();
                 javax.swing.SwingUtilities.invokeLater(() -> {
