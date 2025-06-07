@@ -110,10 +110,10 @@ public class JadxAiViewAction {
                 }
                 if (!notFound.isEmpty()) {
                     System.err.println("Methods not found for renaming: " + notFound);
-                    // Optionally, show a GUI dialog here
+                    final String notFoundMsg = "Some methods could not be renamed: " + notFound;
                     javax.swing.SwingUtilities.invokeLater(() -> {
                         javax.swing.JOptionPane.showMessageDialog(null,
-                                "Some methods could not be renamed: " + notFound,
+                                notFoundMsg,
                                 "AI Rename All Method Warning",
                                 javax.swing.JOptionPane.WARNING_MESSAGE);
                     });
@@ -121,10 +121,11 @@ public class JadxAiViewAction {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("Failed to parse or apply AI response: " + s);
+                final String errorMsg = "Failed to parse or apply AI response:\n" + s +
+                        "\n\nError: " + e.getMessage();
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     javax.swing.JOptionPane.showMessageDialog(null,
-                            "Failed to parse or apply AI response:\n" + s +
-                            "\n\nError: " + e.getMessage(),
+                            errorMsg,
                             "AI Rename All Method Error",
                             javax.swing.JOptionPane.ERROR_MESSAGE);
                 });
