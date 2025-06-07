@@ -75,6 +75,7 @@ public class JadxAiViewAction {
             String code = CodeExtractor.getCode(node);
             ClassNode clsNode = (ClassNode) ref;
             String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
+            System.out.println("[AI Rename All Method] Raw response: " + s);
             // Strip markdown code fences if present
             if (s.startsWith("```json")) {
                 s = s.substring(7).trim();
@@ -82,9 +83,9 @@ public class JadxAiViewAction {
                 if (endFence != -1) {
                     s = s.substring(0, endFence).trim();
                 }
-            } else if (s.startsWith("```")) {
+            } else if (s.startsWith("```" ) ) {
                 s = s.substring(3).trim();
-                int endFence = s.lastIndexOf("```");
+                int endFence = s.lastIndexOf("```" );
                 if (endFence != -1) {
                     s = s.substring(0, endFence).trim();
                 }
