@@ -75,6 +75,20 @@ public class JadxAiViewAction {
             String code = CodeExtractor.getCode(node);
             ClassNode clsNode = (ClassNode) ref;
             String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
+            // Strip markdown code fences if present
+            if (s.startsWith("```json")) {
+                s = s.substring(7).trim();
+                int endFence = s.lastIndexOf("```");
+                if (endFence != -1) {
+                    s = s.substring(0, endFence).trim();
+                }
+            } else if (s.startsWith("```")) {
+                s = s.substring(3).trim();
+                int endFence = s.lastIndexOf("```");
+                if (endFence != -1) {
+                    s = s.substring(0, endFence).trim();
+                }
+            }
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 Map<String,MethodNode> nodeSmap = new HashMap<>();
