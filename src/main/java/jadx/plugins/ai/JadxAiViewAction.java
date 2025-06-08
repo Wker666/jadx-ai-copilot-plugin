@@ -21,7 +21,8 @@ import jadx.plugins.ai.ai.LangchainOpenAiChatModel;
 import jadx.plugins.ai.module.GraphStructure;
 import jadx.plugins.ai.ui.FlowchartUI;
 import jadx.plugins.ai.utils.CodeExtractor;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +41,7 @@ public class JadxAiViewAction {
 	public static String DECOMPILE_METHOD = "Please decompile the following Smail code into Java code, ensuring that the code logic is exactly the same. Only return the Java code of this function, do not return any other content, do not return the markdown format, only return the code. Remember that the code needs to be decompiled exactly the same.";
 
 	public static String RENAME_ALL_METHOD = "What is returned to me must be pure JSON content, and the JSON is stored in the form of key-value pairs. The key name is the original method name, and the key value is the optimized method name. Make sure that the returned JSON string is in the above format. Do not return it to me in markdown format, do not include `, just a pure JSON string. This is the command.";
+	private static final Logger LOG = LoggerFactory.getLogger(JadxAiViewAction.class);
 
 	public static void addToPopupMenu(JadxPluginContext context) {
 		JadxAiViewAction.context = context;
@@ -70,33 +72,68 @@ public class JadxAiViewAction {
 		});
 
 		context.getGuiContext().addPopupMenuAction("Ai Rename All Method", ref -> (ref.getAnnType() == ICodeAnnotation.AnnType.CLASS),
-				null, ref -> {
-			JavaNode node = context.getDecompiler().getJavaNodeByRef(ref);
-			String code = CodeExtractor.getCode(node);
-			ClassNode clsNode = (ClassNode) ref;
-			String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
-			ObjectMapper objectMapper = new ObjectMapper();
-			try {
-				Map<String,MethodNode> nodeSmap = new HashMap<>();
-				assert clsNode != null;
-				for (MethodNode method : clsNode.getMethods()) {
-					nodeSmap.put(method.getName(), method);
-				}
-				Map<String, Object> map = objectMapper.readValue(s, Map.class);
-				for (Map.Entry<String, Object> entry : map.entrySet()) {
-					String mthName = entry.getKey();
-					MethodNode methodNode = nodeSmap.get(mthName);
-					if(methodNode == null){
-						// 此处匹配错误。
-						continue;
-					}
-					methodNode.rename((String) entry.getValue());
-					context.getGuiContext().applyNodeRename(methodNode);
-				}
-			} catch (Exception e) {
-				throw new RuntimeException("error:\n"+s);
-			}
-		});
+                null, ref -> {
+            JavaNode node = context.getDecompiler().getJavaNodeByRef(ref);
+            String code = CodeExtractor.getCode(node);
+            ClassNode clsNode = (ClassNode) ref;
+            String s = LangchainOpenAiChatModel.ask(RENAME_ALL_METHOD + "\n" + code).trim();
+			LOG.info("[AI Rename All Method] Raw response: {}", s);
+            // Strip markdown code fences if present
+            if (s.startsWith("```json")) {
+                s = s.substring(7).trim();
+                int endFence = s.lastIndexOf("```");
+                if (endFence != -1) {
+                    s = s.substring(0, endFence).trim();
+                }
+            } else if (s.startsWith("```" ) ) {
+                s = s.substring(3).trim();
+                int endFence = s.lastIndexOf("```" );
+                if (endFence != -1) {
+                    s = s.substring(0, endFence).trim();
+                }
+            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                Map<String,MethodNode> nodeSmap = new HashMap<>();
+                assert clsNode != null;
+                for (MethodNode method : clsNode.getMethods()) {
+                    nodeSmap.put(method.getName(), method);
+                }
+                Map<String, Object> map = objectMapper.readValue(s, Map.class);
+                List<String> notFound = new ArrayList<>();
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    String mthName = entry.getKey();
+                    MethodNode methodNode = nodeSmap.get(mthName);
+                    if(methodNode == null){
+                        notFound.add(mthName);
+                        continue;
+                    }
+                    methodNode.rename((String) entry.getValue());
+                    context.getGuiContext().applyNodeRename(methodNode);
+                }
+                if (!notFound.isEmpty()) {
+					LOG.warn("Methods not found for renaming: {}", notFound);
+                    final String notFoundMsg = "Some methods could not be renamed: " + notFound;
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        javax.swing.JOptionPane.showMessageDialog(null,
+                                notFoundMsg,
+                                "AI Rename All Method Warning",
+                                javax.swing.JOptionPane.WARNING_MESSAGE);
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+				LOG.error("Failed to parse or apply AI response: {}", s, e);
+                final String errorMsg = "Failed to parse or apply AI response:\n" + s +
+                        "\n\nError: " + e.getMessage();
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    javax.swing.JOptionPane.showMessageDialog(null,
+                            errorMsg,
+                            "AI Rename All Method Error",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
+                });
+            }
+        });
 
 		context.getGuiContext().addPopupMenuAction("Ai Comment", ref -> ref.getAnnType() == ICodeAnnotation.AnnType.METHOD
 				|| (ref.getAnnType() == ICodeAnnotation.AnnType.CLASS), null, iCodeNodeRef -> {
